@@ -862,7 +862,6 @@
   }, { passive: true });
 
   document.addEventListener('DOMContentLoaded', () => {
-    repairPageCopy();
     configureForm();
     submissionFrame.addEventListener('load', handleFrameLoad);
   });
@@ -880,11 +879,11 @@
   }
 
   function configureForm() {
-    const endpoint = window.ORFLIE_CONFIG && window.ORFLIE_CONFIG.appsScriptUrl;
+    const endpoint = normalizeAppsScriptUrl(window.ORFLIE_CONFIG && window.ORFLIE_CONFIG.appsScriptUrl);
 
     if (!endpoint || endpoint.includes('COLE_AQUI')) {
       submitButton.disabled = true;
-      submitStatus.textContent = 'Configure a URL do Google Apps Script no arquivo config.js para habilitar o envio.';
+      submitStatus.textContent = 'Configure a URL publica do Google Apps Script no arquivo config.js para habilitar o envio.';
       return;
     }
 
@@ -893,6 +892,13 @@
     submitStatus.textContent = 'Formulario pronto para envio.';
   }
 
+  function normalizeAppsScriptUrl(endpoint) {
+    if (!endpoint) {
+      return '';
+    }
+
+    return endpoint.replace('https://script.google.com/a/macros/orflie.com/s/', 'https://script.google.com/macros/s/');
+  }
   function handleFrameLoad() {
     if (!awaitingSubmission) {
       return;
@@ -900,6 +906,24 @@
 
     awaitingSubmission = false;
     submitButton.disabled = false;
+
+    let responseText = '';
+    try {
+      responseText = submissionFrame.contentDocument && submissionFrame.contentDocument.body
+        ? submissionFrame.contentDocument.body.innerText
+        : '';
+    } catch (error) {
+      submitStatus.classList.add('is-error');
+      submitStatus.textContent = 'Nao foi possivel confirmar o envio. Verifique se o Google Apps Script esta publico para qualquer pessoa.';
+      return;
+    }
+
+    if (!responseText.includes('"ok":true')) {
+      submitStatus.classList.add('is-error');
+      submitStatus.textContent = 'O Google recusou o envio. Revise a implantacao do Apps Script e deixe o acesso como Qualquer pessoa.';
+      return;
+    }
+
     submitStatus.classList.remove('is-error');
     submitStatus.textContent = 'Recebemos as informacoes com sucesso.';
     toast.classList.add('show');
@@ -908,7 +932,6 @@
     clearValidation();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-
   function handleSubmit(event) {
     event.preventDefault();
 
@@ -1063,51 +1086,7 @@
     return text.replace(/\s+/g, ' ').replace(/\*/g, '').trim();
   }
 
-  function decodeLatin1ToUtf8(text) {
-    let decoded = text;
-
-    for (let attempt = 0; attempt < 2; attempt += 1) {
-      const bytes = Uint8Array.from(Array.from(decoded).map(character => character.charCodeAt(0) & 255));
-      const repaired = new TextDecoder('utf-8').decode(bytes);
-      if (countReadableChars(repaired) < countReadableChars(decoded)) {
-        break;
-      }
-      decoded = repaired;
-    }
-
-    return decoded;
-  }
-
-  function countReadableChars(text) {
-    return (text.match(/[A-Za-zÀ-ÿ0-9]/g) || []).length;
-  }
-
-  function repairPageCopy() {
-    document.title = decodeLatin1ToUtf8(document.title);
-
-    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-    const textNodes = [];
-    while (walker.nextNode()) {
-      textNodes.push(walker.currentNode);
-    }
-
-    textNodes.forEach(node => {
-      if (!node.textContent.trim()) {
-        return;
-      }
-      node.textContent = decodeLatin1ToUtf8(node.textContent);
-    });
-
-    document.querySelectorAll('[placeholder],[title]').forEach(element => {
-      if (element.hasAttribute('placeholder')) {
-        element.setAttribute('placeholder', decodeLatin1ToUtf8(element.getAttribute('placeholder')));
-      }
-
-      if (element.hasAttribute('title')) {
-        element.setAttribute('title', decodeLatin1ToUtf8(element.getAttribute('title')));
-      }
-    });
-  }
+  function 
 </script>
 </body>
 </html>
