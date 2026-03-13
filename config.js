@@ -1,3 +1,3 @@
 ﻿window.ORFLIE_CONFIG = {
-  appsScriptUrl: "https://script.google.com/macros/s/AKfycbyKaf4ojJCnf6qcduwP38D0bb2WL24qrzruy576f119uEUCl2VPI6M7fgNHaL_07jLEqg/exec"
+  appsScriptUrl: "https://script.google.com/macros/s/AKfycbxi35V-lhf7XkvQ9f6hxf2iFjgq7SZLlNU3UuE2RSrHxFC7A6doBwrB9fGFDK5hU21VrA/exec"
 };
