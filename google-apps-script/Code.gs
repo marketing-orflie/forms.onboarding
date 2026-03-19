@@ -1,11 +1,19 @@
 const SHEET_NAME = 'Respostas';
+const SPREADSHEET_ID = '1KTSV9Bd2a13RBugGUaVjcl8QlGWtYIJ4bpOjmGZMb5Y';
+
+function doGet() {
+  return ContentService
+    .createTextOutput('Apps Script online')
+    .setMimeType(ContentService.MimeType.TEXT);
+}
 
 function doPost(e) {
   const lock = LockService.getScriptLock();
   lock.waitLock(10000);
 
   try {
-    const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+    // Usa openById para funcionar como script standalone (não precisa ser container-bound)
+    const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
     const sheet = spreadsheet.getSheetByName(SHEET_NAME) || spreadsheet.insertSheet(SHEET_NAME);
 
     ensureHeaders_(sheet);
@@ -25,6 +33,11 @@ function doPost(e) {
 
     return ContentService
       .createTextOutput(JSON.stringify({ ok: true }))
+      .setMimeType(ContentService.MimeType.JSON);
+
+  } catch (error) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ ok: false, error: error.message }))
       .setMimeType(ContentService.MimeType.JSON);
   } finally {
     lock.releaseLock();

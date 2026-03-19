@@ -387,7 +387,7 @@
   <p>Essas informações constroem o DNA interno da sua conta – nossa base para entregar um atendimento comercial preciso, personalizado e com resultados reais.</p>
 </div>
 
-<form class="form-container" id="onboardingForm" onsubmit="handleSubmit(event)" method="POST" target="submissionFrame" novalidate>
+<form class="form-container" id="onboardingForm" onsubmit="handleSubmit(event)" novalidate>
   <input type="hidden" name="payload" id="payloadField">
   <input type="hidden" name="company_name" id="companyNameField">
   <input type="hidden" name="contact_name" id="contactNameField">
@@ -833,7 +833,6 @@
 
 </form>
 
-<iframe name="submissionFrame" id="submissionFrame" title="Envio do formulario" hidden></iframe>
 
 <div class="toast" id="toast">
   <span>✅</span>
@@ -843,7 +842,6 @@
 <script src="./config.js"></script>
 <script>
   const form = document.getElementById('onboardingForm');
-  const submissionFrame = document.getElementById('submissionFrame');
   const submitButton = form.querySelector('.btn-submit');
   const submitStatus = document.getElementById('submitStatus');
   const toast = document.getElementById('toast');
@@ -854,8 +852,6 @@
   const contactPhoneField = document.getElementById('contactPhoneField');
   const companySegmentField = document.getElementById('companySegmentField');
 
-  let awaitingSubmission = false;
-
   window.addEventListener('scroll', () => {
     const pct = Math.min(100, (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
     document.getElementById('progressBar').style.width = pct + '%';
@@ -863,7 +859,6 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     configureForm();
-    submissionFrame.addEventListener('load', handleFrameLoad);
   });
 
   function addProductRow() {
@@ -899,31 +894,7 @@
     return endpoint.replace('https://script.google.com/a/macros/orflie.com/s/', 'https://script.google.com/macros/s/');
   }
 
-  function handleFrameLoad() {
-    if (!awaitingSubmission) {
-      return;
-    }
-
-    awaitingSubmission = false;
-    submitButton.disabled = false;
-
-    let responseText = '';
-    try {
-      responseText = submissionFrame.contentDocument && submissionFrame.contentDocument.body
-        ? submissionFrame.contentDocument.body.innerText
-        : '';
-    } catch (error) {
-      submitStatus.classList.add('is-error');
-      submitStatus.textContent = 'Não foi possível confirmar o envio. Verifique se o Google Apps Script está público para qualquer pessoa.';
-      return;
-    }
-
-    if (!responseText.includes('"ok":true')) {
-      submitStatus.classList.add('is-error');
-      submitStatus.textContent = 'O Google recusou o envio. Revise a implantação do Apps Script e deixe o acesso como Qualquer pessoa.';
-      return;
-    }
-
+  function showSuccess() {
     submitStatus.classList.remove('is-error');
     submitStatus.textContent = 'Recebemos as informações com sucesso.';
     toast.classList.add('show');
@@ -962,11 +933,35 @@
     contactPhoneField.value = payload.summary.contactPhone;
     companySegmentField.value = payload.summary.companySegment;
 
-    awaitingSubmission = true;
     submitButton.disabled = true;
     submitStatus.classList.remove('is-error');
     submitStatus.textContent = 'Enviando respostas...';
-    form.submit();
+
+    const endpoint = normalizeAppsScriptUrl(window.ORFLIE_CONFIG && window.ORFLIE_CONFIG.appsScriptUrl);
+    const params = new URLSearchParams({
+      payload: payloadField.value,
+      company_name: companyNameField.value,
+      contact_name: contactNameField.value,
+      contact_email: contactEmailField.value,
+      contact_phone: contactPhoneField.value,
+      company_segment: companySegmentField.value,
+    });
+
+    fetch(endpoint, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: params.toString(),
+    })
+      .then(() => {
+        submitButton.disabled = false;
+        showSuccess();
+      })
+      .catch(() => {
+        submitButton.disabled = false;
+        submitStatus.classList.add('is-error');
+        submitStatus.textContent = 'Erro de conexão. Verifique sua internet e tente novamente.';
+      });
   }
 
   function buildPayload(invalidGroups) {
