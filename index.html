@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Orflie – Formulário de Onboarding</title>
+<meta name="description" content="Formulário de onboarding da Orflie. Preencha as informações da sua empresa para construirmos juntos um atendimento comercial preciso e personalizado.">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -323,6 +324,11 @@
     transform: translateY(-2px);
     box-shadow: 0 14px 36px rgba(255,122,47,0.25);
   }
+  .btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
 
   .toast {
     position: fixed;
@@ -362,7 +368,9 @@
     min-height: 22px;
     color: var(--muted);
     font-size: 0.9rem;
+    text-align: center;
   }
+
   @media (max-width: 620px) {
     header { padding: 0 20px; }
     .hero { padding: 96px 20px 36px; }
@@ -378,43 +386,58 @@
 
 <header>
   <div class="logo">Orf<span>lie</span></div>
-  <span class="step-indicator">DNA do Cliente – <strong>Onboarding</strong></span>
+  <span class="step-indicator">DNA do Cliente — <strong>Onboarding</strong></span>
 </header>
 
 <div class="hero">
   <div class="hero-tag">Projeto Comercial · White Label</div>
   <h1>Formulário de<br><em>Onboarding</em></h1>
-  <p>Essas informações constroem o DNA interno da sua conta – nossa base para entregar um atendimento comercial preciso, personalizado e com resultados reais.</p>
+  <p>Essas informações constroem o DNA interno da sua conta — nossa base para entregar um atendimento comercial preciso, personalizado e com resultados reais.</p>
 </div>
 
-<form class="form-container" id="onboardingForm" onsubmit="handleSubmit(event)" novalidate>
-  <input type="hidden" name="payload" id="payloadField">
-  <input type="hidden" name="company_name" id="companyNameField">
-  <input type="hidden" name="contact_name" id="contactNameField">
-  <input type="hidden" name="contact_email" id="contactEmailField">
-  <input type="hidden" name="contact_phone" id="contactPhoneField">
-  <input type="hidden" name="company_segment" id="companySegmentField">
+<form class="form-container" id="onboardingForm" novalidate>
 
   <!-- 01 -->
   <div class="section-block">
     <div class="section-header"><span class="section-num">01</span><span class="section-title">Informações Gerais da Empresa</span></div>
     <div class="section-body">
       <div class="form-row">
-        <div class="form-group"><label>Nome da Empresa <span class="req">*</span></label><input type="text" placeholder="Razão social ou nome fantasia"></div>
-        <div class="form-group"><label>CNPJ</label><input type="text" placeholder="00.000.000/0000-00"></div>
+        <div class="form-group">
+          <label>Nome da Empresa <span class="req">*</span></label>
+          <input id="f_empresa_nome" type="text" placeholder="Razão social ou nome fantasia">
+        </div>
+        <div class="form-group">
+          <label>CNPJ</label>
+          <input id="f_cnpj" type="text" placeholder="00.000.000/0000-00">
+        </div>
       </div>
       <div class="form-row">
-        <div class="form-group"><label>Site</label><input type="url" placeholder="https://seusite.com.br"></div>
-        <div class="form-group"><label>Segmento de Atuação <span class="req">*</span></label><input type="text" placeholder="Ex: SaaS B2B, Indústria, Varejo..."></div>
+        <div class="form-group">
+          <label>Site</label>
+          <input id="f_site" type="url" placeholder="https://seusite.com.br">
+        </div>
+        <div class="form-group">
+          <label>Segmento de Atuação <span class="req">*</span></label>
+          <input id="f_segmento" type="text" placeholder="Ex: SaaS B2B, Indústria, Varejo...">
+        </div>
       </div>
       <div class="form-row cols-3">
-        <div class="form-group"><label>Tempo de Mercado</label><input type="text" placeholder="Ex: 5 anos"></div>
-        <div class="form-group"><label>Nº de Colaboradores</label><input type="number" placeholder="Ex: 80"></div>
-        <div class="form-group"><label>Cidade / Estado <span class="req">*</span></label><input type="text" placeholder="São Paulo / SP"></div>
+        <div class="form-group">
+          <label>Tempo de Mercado</label>
+          <input id="f_tempo_mercado" type="text" placeholder="Ex: 5 anos">
+        </div>
+        <div class="form-group">
+          <label>Nº de Colaboradores</label>
+          <input id="f_colaboradores" type="number" placeholder="Ex: 80">
+        </div>
+        <div class="form-group">
+          <label>Cidade / Estado <span class="req">*</span></label>
+          <input id="f_cidade" type="text" placeholder="São Paulo / SP">
+        </div>
       </div>
       <div class="form-group">
         <label>Faturamento Médio Anual</label>
-        <select>
+        <select id="f_faturamento">
           <option value="" disabled selected>Selecione uma faixa</option>
           <option>Até R$ 500 mil</option>
           <option>R$ 500 mil – R$ 2 milhões</option>
@@ -426,12 +449,24 @@
       </div>
       <div class="divider"></div>
       <div class="form-row">
-        <div class="form-group"><label>Nome do Responsável <span class="req">*</span></label><input type="text" placeholder="Nome completo"></div>
-        <div class="form-group"><label>Cargo</label><input type="text" placeholder="Ex: Diretor Comercial"></div>
+        <div class="form-group">
+          <label>Nome do Responsável <span class="req">*</span></label>
+          <input id="f_resp_nome" type="text" placeholder="Nome completo">
+        </div>
+        <div class="form-group">
+          <label>Cargo</label>
+          <input id="f_resp_cargo" type="text" placeholder="Ex: Diretor Comercial">
+        </div>
       </div>
       <div class="form-row">
-        <div class="form-group"><label>Telefone / WhatsApp <span class="req">*</span></label><input type="tel" placeholder="(11) 99999-0000"></div>
-        <div class="form-group"><label>E-mail <span class="req">*</span></label><input type="email" placeholder="nome@empresa.com.br"></div>
+        <div class="form-group">
+          <label>Telefone / WhatsApp <span class="req">*</span></label>
+          <input id="f_telefone" type="tel" placeholder="(11) 99999-0000">
+        </div>
+        <div class="form-group">
+          <label>E-mail <span class="req">*</span></label>
+          <input id="f_email" type="email" placeholder="nome@empresa.com.br">
+        </div>
       </div>
     </div>
   </div>
@@ -450,10 +485,22 @@
           <label class="check-item"><input type="radio" name="pos"><span>Outro</span></label>
         </div>
       </div>
-      <div class="form-group"><label>Principal diferencial competitivo <span class="req">*</span></label><textarea placeholder="O que faz a empresa única: tecnologia, atendimento, preço, expertise, velocidade..."></textarea></div>
-      <div class="form-group"><label>Como a empresa quer ser percebida pelos clientes?</label><textarea placeholder="Ex: 'Queremos ser vistos como o parceiro mais confiável do setor, não apenas um fornecedor...'"></textarea></div>
-      <div class="form-group"><label>Missão ou propósito declarado</label><input type="text" placeholder="Ex: Simplificar a gestão de RH para PMEs brasileiras"></div>
-      <div class="form-group"><label>Quais palavras NÃO representam a empresa?</label><input type="text" placeholder="Ex: Barato, improvisado, genérico... (ajuda o time a evitar erros de abordagem)"></div>
+      <div class="form-group">
+        <label>Principal diferencial competitivo <span class="req">*</span></label>
+        <textarea placeholder="O que faz a empresa única: tecnologia, atendimento, preço, expertise, velocidade..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Como a empresa quer ser percebida pelos clientes?</label>
+        <textarea placeholder="Ex: 'Queremos ser vistos como o parceiro mais confiável do setor, não apenas um fornecedor...'"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Missão ou propósito declarado</label>
+        <input type="text" placeholder="Ex: Simplificar a gestão de RH para PMEs brasileiras">
+      </div>
+      <div class="form-group">
+        <label>Quais palavras NÃO representam a empresa?</label>
+        <input type="text" placeholder="Ex: Barato, improvisado, genérico... (ajuda o time a evitar erros de abordagem)">
+      </div>
     </div>
   </div>
 
@@ -482,7 +529,10 @@
         </table>
       </div>
       <button type="button" class="add-row-btn" onclick="addProductRow()">+ Adicionar linha</button>
-      <div class="form-group"><label>Produto/serviço prioritário neste projeto</label><input type="text" placeholder="Qual deve ter foco principal de vendas?"></div>
+      <div class="form-group">
+        <label>Produto/serviço prioritário neste projeto</label>
+        <input type="text" placeholder="Qual deve ter foco principal de vendas?">
+      </div>
     </div>
   </div>
 
@@ -491,7 +541,10 @@
     <div class="section-header"><span class="section-num">04</span><span class="section-title">Perfil de Cliente Ideal (ICP)</span></div>
     <div class="section-body">
       <div class="form-row">
-        <div class="form-group"><label>Segmento-alvo <span class="req">*</span></label><input type="text" placeholder="Ex: SaaS B2B, indústrias alimentícias..."></div>
+        <div class="form-group">
+          <label>Segmento-alvo <span class="req">*</span></label>
+          <input type="text" placeholder="Ex: SaaS B2B, indústrias alimentícias...">
+        </div>
         <div class="form-group">
           <label>Porte da empresa cliente</label>
           <select>
@@ -506,8 +559,14 @@
         </div>
       </div>
       <div class="form-row">
-        <div class="form-group"><label>Faixa de faturamento do cliente ideal</label><input type="text" placeholder="Ex: R$2M – R$20M por ano"></div>
-        <div class="form-group"><label>Região de atuação</label><input type="text" placeholder="Ex: Brasil inteiro, Sudeste, SP Capital..."></div>
+        <div class="form-group">
+          <label>Faixa de faturamento do cliente ideal</label>
+          <input type="text" placeholder="Ex: R$2M – R$20M por ano">
+        </div>
+        <div class="form-group">
+          <label>Região de atuação</label>
+          <input type="text" placeholder="Ex: Brasil inteiro, Sudeste, SP Capital...">
+        </div>
       </div>
       <div class="form-group">
         <label>Quem toma a decisão de compra?</label>
@@ -522,10 +581,19 @@
         </div>
       </div>
       <div class="form-row">
-        <div class="form-group"><label>Cargo exato do decisor mais comum</label><input type="text" placeholder="Ex: Gerente de Suprimentos, CFO..."></div>
-        <div class="form-group"><label>Existe um influenciador na jornada?</label><input type="text" placeholder="Ex: Coordenador de TI que apresenta ao Diretor"></div>
+        <div class="form-group">
+          <label>Cargo exato do decisor mais comum</label>
+          <input type="text" placeholder="Ex: Gerente de Suprimentos, CFO...">
+        </div>
+        <div class="form-group">
+          <label>Existe um influenciador na jornada?</label>
+          <input type="text" placeholder="Ex: Coordenador de TI que apresenta ao Diretor">
+        </div>
       </div>
-      <div class="form-group"><label>Principal gatilho que leva o cliente a buscar a solução</label><textarea placeholder="Ex: Crescimento acelerado que sobrecarrega a equipe, novo concorrente no mercado..."></textarea></div>
+      <div class="form-group">
+        <label>Principal gatilho que leva o cliente a buscar a solução</label>
+        <textarea placeholder="Ex: Crescimento acelerado que sobrecarrega a equipe, novo concorrente no mercado..."></textarea>
+      </div>
     </div>
   </div>
 
@@ -541,8 +609,14 @@
           <div class="numbered-item"><span class="num-badge">3</span><input type="text" placeholder="Terceira dor"></div>
         </div>
       </div>
-      <div class="form-group"><label>Impacto financeiro/operacional dessas dores</label><textarea placeholder="Ex: Custo de aquisição elevado, perda de receita por ineficiência, alto turnover..."></textarea></div>
-      <div class="form-group"><label>Como o cliente resolve esse problema hoje (antes de conhecer a empresa)?</label><textarea placeholder="Ex: Planilhas manuais, fornecedor caro, processo interno ineficiente..."></textarea></div>
+      <div class="form-group">
+        <label>Impacto financeiro/operacional dessas dores</label>
+        <textarea placeholder="Ex: Custo de aquisição elevado, perda de receita por ineficiência, alto turnover..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Como o cliente resolve esse problema hoje (antes de conhecer a empresa)?</label>
+        <textarea placeholder="Ex: Planilhas manuais, fornecedor caro, processo interno ineficiente..."></textarea>
+      </div>
     </div>
   </div>
 
@@ -559,7 +633,10 @@
             <label class="check-item"><input type="radio" name="crm"><span>Parcialmente</span></label>
           </div>
         </div>
-        <div class="form-group"><label>Qual CRM utiliza?</label><input type="text" placeholder="HubSpot, Pipedrive, RD Station, planilha..."></div>
+        <div class="form-group">
+          <label>Qual CRM utiliza?</label>
+          <input type="text" placeholder="HubSpot, Pipedrive, RD Station, planilha...">
+        </div>
       </div>
       <div class="form-group">
         <label>Canais de comunicação com leads</label>
@@ -584,7 +661,10 @@
           <label class="check-item"><input type="checkbox"><span>Parceiros</span></label>
         </div>
       </div>
-      <div class="form-group"><label>Descreva as etapas do funil de vendas atual</label><textarea placeholder="Ex: Lead → Qualificação → Reunião → Proposta → Negociação → Fechamento. Como funciona na prática?"></textarea></div>
+      <div class="form-group">
+        <label>Descreva as etapas do funil de vendas atual</label>
+        <textarea placeholder="Ex: Lead → Qualificação → Reunião → Proposta → Negociação → Fechamento. Como funciona na prática?"></textarea>
+      </div>
     </div>
   </div>
 
@@ -593,7 +673,10 @@
     <div class="section-header"><span class="section-num">07</span><span class="section-title">Equipe Comercial</span></div>
     <div class="section-body">
       <div class="form-row">
-        <div class="form-group"><label>Total de vendedores ativos</label><input type="number" placeholder="Ex: 4"></div>
+        <div class="form-group">
+          <label>Total de vendedores ativos</label>
+          <input type="number" placeholder="Ex: 4">
+        </div>
         <div class="form-group">
           <label>Estrutura da equipe</label>
           <div class="check-group">
@@ -606,7 +689,10 @@
           </div>
         </div>
       </div>
-      <div class="form-group"><label>Metas comerciais atuais (mensal / anual)</label><textarea placeholder="Ex: Meta mensal de R$150k em novos contratos, 10 novos clientes por mês..."></textarea></div>
+      <div class="form-group">
+        <label>Metas comerciais atuais (mensal / anual)</label>
+        <textarea placeholder="Ex: Meta mensal de R$150k em novos contratos, 10 novos clientes por mês..."></textarea>
+      </div>
       <div class="form-group">
         <label>O time tem treinamento de vendas regular?</label>
         <div class="check-group">
@@ -662,8 +748,14 @@
           <div class="numbered-item"><span class="num-badge">5</span><input type="text" placeholder="Ex: 'Não conheço bem a empresa de vocês'"></div>
         </div>
       </div>
-      <div class="form-group"><label>Qual objeção é mais difícil de superar e por quê?</label><textarea placeholder="Descreva a objeção e o motivo de ser desafiadora para o time..."></textarea></div>
-      <div class="form-group"><label>Algum argumento que já funcionou bem para contornar objeções?</label><textarea placeholder="Ex: Mostrar ROI com dados, compartilhar case de cliente similar..."></textarea></div>
+      <div class="form-group">
+        <label>Qual objeção é mais difícil de superar e por quê?</label>
+        <textarea placeholder="Descreva a objeção e o motivo de ser desafiadora para o time..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Algum argumento que já funcionou bem para contornar objeções?</label>
+        <textarea placeholder="Ex: Mostrar ROI com dados, compartilhar case de cliente similar..."></textarea>
+      </div>
     </div>
   </div>
 
@@ -679,9 +771,18 @@
           <div class="numbered-item"><span class="num-badge">3</span><input type="text" placeholder="Nome do concorrente"></div>
         </div>
       </div>
-      <div class="form-group"><label>O que os concorrentes fazem melhor?</label><textarea placeholder="Ex: Preço mais baixo, marca mais conhecida, interface mais simples..."></textarea></div>
-      <div class="form-group"><label>O que a empresa faz melhor que os concorrentes?</label><textarea placeholder="Ex: Suporte técnico, entrega mais rápida, customização, expertise setorial..."></textarea></div>
-      <div class="form-group"><label>Quando o cliente vai para o concorrente, qual o principal motivo?</label><textarea placeholder="Ex: Preço foi decisivo, falta de urgência no follow-up, proposta menos clara..."></textarea></div>
+      <div class="form-group">
+        <label>O que os concorrentes fazem melhor?</label>
+        <textarea placeholder="Ex: Preço mais baixo, marca mais conhecida, interface mais simples..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>O que a empresa faz melhor que os concorrentes?</label>
+        <textarea placeholder="Ex: Suporte técnico, entrega mais rápida, customização, expertise setorial..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Quando o cliente vai para o concorrente, qual o principal motivo?</label>
+        <textarea placeholder="Ex: Preço foi decisivo, falta de urgência no follow-up, proposta menos clara..."></textarea>
+      </div>
     </div>
   </div>
 
@@ -702,7 +803,10 @@
         </div>
       </div>
       <div class="form-row">
-        <div class="form-group"><label>Meta de faturamento desejada</label><input type="text" placeholder="Ex: R$500k/mês em 6 meses"></div>
+        <div class="form-group">
+          <label>Meta de faturamento desejada</label>
+          <input type="text" placeholder="Ex: R$500k/mês em 6 meses">
+        </div>
         <div class="form-group">
           <label>Prazo esperado para ver resultados</label>
           <select>
@@ -712,7 +816,10 @@
           </select>
         </div>
       </div>
-      <div class="form-group"><label>Como o sucesso deste projeto será medido internamente?</label><textarea placeholder="Ex: Número de reuniões agendadas, aumento no faturamento, redução do CAC, pipeline gerado..."></textarea></div>
+      <div class="form-group">
+        <label>Como o sucesso deste projeto será medido internamente?</label>
+        <textarea placeholder="Ex: Número de reuniões agendadas, aumento no faturamento, redução do CAC, pipeline gerado..."></textarea>
+      </div>
     </div>
   </div>
 
@@ -752,7 +859,10 @@
             <option>Acima de R$ 50.000</option>
           </select>
         </div>
-        <div class="form-group"><label>Agência de marketing ativa?</label><input type="text" placeholder="Nome ou 'gerenciamento interno'"></div>
+        <div class="form-group">
+          <label>Agência de marketing ativa?</label>
+          <input type="text" placeholder="Nome ou 'gerenciamento interno'">
+        </div>
       </div>
     </div>
   </div>
@@ -774,7 +884,10 @@
           <label class="check-item"><input type="checkbox"><span>Calculadora de ROI</span></label>
         </div>
       </div>
-      <div class="form-group"><label>Qual material precisa ser criado ou melhorado com urgência?</label><textarea placeholder="Ex: A proposta comercial está desatualizada..."></textarea></div>
+      <div class="form-group">
+        <label>Qual material precisa ser criado ou melhorado com urgência?</label>
+        <textarea placeholder="Ex: A proposta comercial está desatualizada..."></textarea>
+      </div>
     </div>
   </div>
 
@@ -783,14 +896,29 @@
     <div class="section-header"><span class="section-num">14</span><span class="section-title">Aprovações e Responsáveis</span></div>
     <div class="section-body">
       <div class="form-row">
-        <div class="form-group"><label>Responsável interno pelo projeto <span class="req">*</span></label><input type="text" placeholder="Nome completo"></div>
-        <div class="form-group"><label>Cargo</label><input type="text" placeholder="Ex: Gerente Comercial"></div>
+        <div class="form-group">
+          <label>Responsável interno pelo projeto <span class="req">*</span></label>
+          <input type="text" placeholder="Nome completo">
+        </div>
+        <div class="form-group">
+          <label>Cargo</label>
+          <input type="text" placeholder="Ex: Gerente Comercial">
+        </div>
       </div>
       <div class="form-row">
-        <div class="form-group"><label>Responsável por aprovar decisões estratégicas</label><input type="text" placeholder="Nome completo"></div>
-        <div class="form-group"><label>Cargo</label><input type="text" placeholder="Ex: CEO, Diretor de Operações"></div>
+        <div class="form-group">
+          <label>Responsável por aprovar decisões estratégicas</label>
+          <input type="text" placeholder="Nome completo">
+        </div>
+        <div class="form-group">
+          <label>Cargo</label>
+          <input type="text" placeholder="Ex: CEO, Diretor de Operações">
+        </div>
       </div>
-      <div class="form-group"><label>Outras partes que precisam ser consultadas?</label><input type="text" placeholder="Ex: Sócio, Conselho, Jurídico..."></div>
+      <div class="form-group">
+        <label>Outras partes que precisam ser consultadas?</label>
+        <input type="text" placeholder="Ex: Sócio, Conselho, Jurídico...">
+      </div>
     </div>
   </div>
 
@@ -811,7 +939,10 @@
           <label class="check-item"><input type="checkbox"><span>Gravações de calls</span></label>
         </div>
       </div>
-      <div class="form-group"><label>Restrições de acesso ou política de segurança?</label><textarea placeholder="Ex: Dados sensíveis precisam de NDA, acesso limitado por VPN..."></textarea></div>
+      <div class="form-group">
+        <label>Restrições de acesso ou política de segurança?</label>
+        <textarea placeholder="Ex: Dados sensíveis precisam de NDA, acesso limitado por VPN..."></textarea>
+      </div>
     </div>
   </div>
 
@@ -819,20 +950,28 @@
   <div class="section-block">
     <div class="section-header"><span class="section-num">16</span><span class="section-title">Observações Gerais</span></div>
     <div class="section-body">
-      <div class="form-group"><label>O que o time da Orflie precisa saber antes de começar?</label><textarea style="min-height:110px" placeholder="Contexto histórico, situações delicadas, parcerias estratégicas, sazonalidade, qualquer informação relevante..."></textarea></div>
-      <div class="form-group"><label>Qual foi a maior frustração com projetos comerciais anteriores?</label><textarea placeholder="Isso nos ajuda a não repetir erros e entregar uma experiência diferente..."></textarea></div>
-      <div class="form-group"><label>O que tornaria este projeto um sucesso absoluto para você?</label><textarea placeholder="Fale com liberdade – isso é o que guia tudo que vamos construir juntos."></textarea></div>
+      <div class="form-group">
+        <label>O que o time da Orflie precisa saber antes de começar?</label>
+        <textarea style="min-height:110px" placeholder="Contexto histórico, situações delicadas, parcerias estratégicas, sazonalidade, qualquer informação relevante..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Qual foi a maior frustração com projetos comerciais anteriores?</label>
+        <textarea placeholder="Isso nos ajuda a não repetir erros e entregar uma experiência diferente..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>O que tornaria este projeto um sucesso absoluto para você?</label>
+        <textarea placeholder="Fale com liberdade — isso é o que guia tudo que vamos construir juntos."></textarea>
+      </div>
     </div>
   </div>
 
   <div class="submit-area">
     <p class="submit-note">Ao enviar, você confirma que as informações são verídicas e autoriza<br>a Orflie a utilizá-las para estruturar o projeto comercial da sua empresa.</p>
-    <button type="submit" class="btn-submit">Enviar Formulário →</button>
+    <button type="submit" id="btnSubmit" class="btn-submit">Enviar Formulário →</button>
     <p class="submit-status" id="submitStatus"></p>
   </div>
 
 </form>
-
 
 <div class="toast" id="toast">
   <span>✅</span>
@@ -842,25 +981,40 @@
 <script src="./config.js"></script>
 <script>
   const form = document.getElementById('onboardingForm');
-  const submitButton = form.querySelector('.btn-submit');
+  const submitButton = document.getElementById('btnSubmit');
   const submitStatus = document.getElementById('submitStatus');
   const toast = document.getElementById('toast');
-  const payloadField = document.getElementById('payloadField');
-  const companyNameField = document.getElementById('companyNameField');
-  const contactNameField = document.getElementById('contactNameField');
-  const contactEmailField = document.getElementById('contactEmailField');
-  const contactPhoneField = document.getElementById('contactPhoneField');
-  const companySegmentField = document.getElementById('companySegmentField');
 
+  // ── Barra de progresso de scroll ──────────────────────────────────────────
   window.addEventListener('scroll', () => {
-    const pct = Math.min(100, (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+    const scrolled = window.scrollY;
+    const total = document.body.scrollHeight - window.innerHeight;
+    const pct = total > 0 ? Math.min(100, (scrolled / total) * 100) : 0;
     document.getElementById('progressBar').style.width = pct + '%';
   }, { passive: true });
 
+  // ── Inicialização ──────────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
-    configureForm();
+    const endpoint = getEndpoint();
+    if (!endpoint) {
+      submitButton.disabled = true;
+      setStatus('Configure a URL do Google Apps Script no arquivo config.js para habilitar o envio.', true);
+    } else {
+      setStatus('');
+    }
   });
 
+  function getEndpoint() {
+    const raw = window.ORFLIE_CONFIG && window.ORFLIE_CONFIG.appsScriptUrl;
+    if (!raw || raw.includes('COLE_AQUI')) return '';
+    // Normaliza URLs de domínio personalizado para o endpoint público
+    return raw.replace(
+      'https://script.google.com/a/macros/orflie.com/s/',
+      'https://script.google.com/macros/s/'
+    );
+  }
+
+  // ── Adicionar linha na tabela de produtos ─────────────────────────────────
   function addProductRow() {
     const tbody = document.querySelector('#productsTable tbody');
     const row = document.createElement('tr');
@@ -873,43 +1027,13 @@
     tbody.appendChild(row);
   }
 
-  function configureForm() {
-    const endpoint = normalizeAppsScriptUrl(window.ORFLIE_CONFIG && window.ORFLIE_CONFIG.appsScriptUrl);
-
-    if (!endpoint || endpoint.includes('COLE_AQUI')) {
-      submitButton.disabled = true;
-      submitStatus.textContent = 'Configure a URL pública do Google Apps Script no arquivo config.js para habilitar o envio.';
-      return;
-    }
-
-    form.action = endpoint;
-    submitButton.disabled = false;
-    submitStatus.textContent = 'Formulário pronto para envio.';
-  }
-
-  function normalizeAppsScriptUrl(endpoint) {
-    if (!endpoint) {
-      return '';
-    }
-    return endpoint.replace('https://script.google.com/a/macros/orflie.com/s/', 'https://script.google.com/macros/s/');
-  }
-
-  function showSuccess() {
-    submitStatus.classList.remove('is-error');
-    submitStatus.textContent = 'Recebemos as informações com sucesso.';
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 5000);
-    form.reset();
-    clearValidation();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function handleSubmit(event) {
+  // ── Envio do formulário ────────────────────────────────────────────────────
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    if (!form.action) {
-      submitStatus.classList.add('is-error');
-      submitStatus.textContent = 'Falta conectar este formulário ao Google Sheets no arquivo config.js.';
+    const endpoint = getEndpoint();
+    if (!endpoint) {
+      setStatus('Falta conectar este formulário ao Google Sheets no arquivo config.js.', true);
       return;
     }
 
@@ -919,93 +1043,91 @@
     const payload = buildPayload(invalidGroups);
 
     if (invalidGroups.length > 0) {
-      invalidGroups.forEach(group => group.classList.add('is-invalid'));
-      submitStatus.classList.add('is-error');
-      submitStatus.textContent = 'Preencha os campos obrigatórios destacados antes de enviar.';
+      invalidGroups.forEach(g => g.classList.add('is-invalid'));
+      setStatus('Preencha os campos obrigatórios destacados antes de enviar.', true);
       invalidGroups[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
 
-    payloadField.value = JSON.stringify(payload);
-    companyNameField.value = payload.summary.companyName;
-    contactNameField.value = payload.summary.contactName;
-    contactEmailField.value = payload.summary.contactEmail;
-    contactPhoneField.value = payload.summary.contactPhone;
-    companySegmentField.value = payload.summary.companySegment;
+    // Campos resumidos para as colunas da planilha
+    const companyName    = payload.summary.companyName    || '';
+    const contactName    = payload.summary.contactName    || '';
+    const contactEmail   = payload.summary.contactEmail   || '';
+    const contactPhone   = payload.summary.contactPhone   || '';
+    const companySegment = payload.summary.companySegment || '';
 
-    submitButton.disabled = true;
-    submitStatus.classList.remove('is-error');
-    submitStatus.textContent = 'Enviando respostas...';
-
-    const endpoint = normalizeAppsScriptUrl(window.ORFLIE_CONFIG && window.ORFLIE_CONFIG.appsScriptUrl);
-    const params = new URLSearchParams({
-      payload: payloadField.value,
-      company_name: companyNameField.value,
-      contact_name: contactNameField.value,
-      contact_email: contactEmailField.value,
-      contact_phone: contactPhoneField.value,
-      company_segment: companySegmentField.value,
+    const body = new URLSearchParams({
+      payload:          JSON.stringify(payload),
+      company_name:     companyName,
+      contact_name:     contactName,
+      contact_email:    contactEmail,
+      contact_phone:    contactPhone,
+      company_segment:  companySegment
     });
 
-    fetch(endpoint, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: params.toString(),
-    })
-      .then(() => {
-        submitButton.disabled = false;
-        showSuccess();
-      })
-      .catch(() => {
-        submitButton.disabled = false;
-        submitStatus.classList.add('is-error');
-        submitStatus.textContent = 'Erro de conexão. Verifique sua internet e tente novamente.';
-      });
-  }
+    submitButton.disabled = true;
+    setStatus('Enviando respostas…', false);
 
+    try {
+      await fetch(endpoint, {
+        method: 'POST',
+        mode: 'no-cors',   // necessário para Google Apps Script em página estática
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString()
+      });
+
+      // no-cors retorna opaque response; assumimos sucesso se não houve exceção
+      setStatus('Informações recebidas com sucesso. Obrigado!', false);
+      showToast();
+      form.reset();
+      clearValidation();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      console.error('Erro ao enviar formulário:', err);
+      setStatus('Não foi possível enviar agora. Verifique sua conexão e tente novamente.', true);
+    } finally {
+      submitButton.disabled = false;
+    }
+  });
+
+  // ── Construção do payload ──────────────────────────────────────────────────
   function buildPayload(invalidGroups) {
-    const summaryFields = Array.from(document.querySelectorAll('.section-block:first-of-type input, .section-block:first-of-type select'));
+    // Coleta os campos do bloco 01 para o resumo
+    const block01 = document.querySelector('.section-block:first-of-type');
+    const s = {
+      companyName:    getValue('f_empresa_nome'),
+      companySegment: getValue('f_segmento'),
+      contactName:    getValue('f_resp_nome'),
+      contactPhone:   getValue('f_telefone'),
+      contactEmail:   getValue('f_email')
+    };
+
     const payload = {
       submittedAt: new Date().toISOString(),
-      summary: {
-        companyName: summaryFields[0] ? summaryFields[0].value.trim() : '',
-        companySegment: summaryFields[3] ? summaryFields[3].value.trim() : '',
-        contactName: summaryFields[7] ? summaryFields[7].value.trim() : '',
-        contactPhone: summaryFields[9] ? summaryFields[9].value.trim() : '',
-        contactEmail: summaryFields[10] ? summaryFields[10].value.trim() : ''
-      },
+      summary: s,
       sections: {}
     };
 
     document.querySelectorAll('.section-block').forEach((section, index) => {
-      const title = cleanLabel(section.querySelector('.section-title') ? section.querySelector('.section-title').textContent : 'Seção ' + (index + 1));
+      const titleEl = section.querySelector('.section-title');
+      const title = cleanLabel(titleEl ? titleEl.textContent : 'Seção ' + (index + 1));
       const sectionData = {};
 
       section.querySelectorAll('.form-group').forEach(group => {
-        const labelElement = Array.from(group.children).find(child => child.tagName === 'LABEL');
-        if (!labelElement) {
-          return;
-        }
+        const labelEl = Array.from(group.children).find(c => c.tagName === 'LABEL' && !c.classList.contains('check-item'));
+        if (!labelEl) return;
 
-        const key = cleanLabel(labelElement.textContent);
+        const key = cleanLabel(labelEl.textContent);
         const value = extractGroupValue(group);
-        const isRequired = Boolean(labelElement.querySelector('.req'));
-        const isEmpty = isValueEmpty(value);
+        const isRequired = Boolean(labelEl.querySelector('.req'));
+        const empty = isValueEmpty(value);
 
-        if (isRequired && isEmpty) {
-          invalidGroups.push(group);
-        }
-
-        if (!isEmpty) {
-          appendUniqueValue(sectionData, key, value);
-        }
+        if (isRequired && empty) invalidGroups.push(group);
+        if (!empty) appendUnique(sectionData, key, value);
       });
 
       const products = extractProducts(section);
-      if (products.length > 0) {
-        sectionData['Produtos cadastrados'] = products;
-      }
+      if (products.length > 0) sectionData['Produtos cadastrados'] = products;
 
       payload.sections[title] = sectionData;
     });
@@ -1013,64 +1135,65 @@
     return payload;
   }
 
+  function getValue(id) {
+    const el = document.getElementById(id);
+    return el ? el.value.trim() : '';
+  }
+
   function extractGroupValue(group) {
+    // Lista numerada
     if (group.querySelector('.numbered-list')) {
-      return Array.from(group.querySelectorAll('.numbered-list input')).map(input => input.value.trim()).filter(Boolean);
+      return Array.from(group.querySelectorAll('.numbered-list input'))
+        .map(i => i.value.trim()).filter(Boolean);
     }
-
-    const checkedCheckboxes = group.querySelectorAll('.check-group input[type="checkbox"]');
-    if (checkedCheckboxes.length > 0) {
-      return Array.from(checkedCheckboxes)
-        .filter(input => input.checked)
-        .map(input => input.parentElement.querySelector('span') ? input.parentElement.querySelector('span').textContent.trim() : '')
-        .filter(Boolean);
+    // Checkboxes
+    const checkboxes = group.querySelectorAll('.check-group input[type="checkbox"]');
+    if (checkboxes.length > 0) {
+      return Array.from(checkboxes)
+        .filter(i => i.checked)
+        .map(i => {
+          const span = i.parentElement.querySelector('span');
+          return span ? span.textContent.trim() : '';
+        }).filter(Boolean);
     }
-
-    const radioOptions = group.querySelectorAll('.check-group input[type="radio"]');
-    if (radioOptions.length > 0) {
-      const selected = Array.from(radioOptions).find(input => input.checked);
-      return selected && selected.parentElement.querySelector('span') ? selected.parentElement.querySelector('span').textContent.trim() : '';
+    // Radio
+    const radios = group.querySelectorAll('.check-group input[type="radio"]');
+    if (radios.length > 0) {
+      const sel = Array.from(radios).find(i => i.checked);
+      if (!sel) return '';
+      const span = sel.parentElement.querySelector('span');
+      return span ? span.textContent.trim() : '';
     }
-
+    // Input / select / textarea genérico
     const field = group.querySelector('input, select, textarea');
     return field ? field.value.trim() : '';
   }
 
   function extractProducts(section) {
     const table = section.querySelector('#productsTable');
-    if (!table) {
-      return [];
-    }
-
+    if (!table) return [];
     return Array.from(table.querySelectorAll('tbody tr'))
       .map(row => {
         const inputs = row.querySelectorAll('input');
         return {
-          produto: inputs[0] ? inputs[0].value.trim() : '',
-          ticketMedio: inputs[1] ? inputs[1].value.trim() : '',
-          margem: inputs[2] ? inputs[2].value.trim() : '',
+          produto:         inputs[0] ? inputs[0].value.trim() : '',
+          ticketMedio:     inputs[1] ? inputs[1].value.trim() : '',
+          margem:          inputs[2] ? inputs[2].value.trim() : '',
           publicoPrincipal: inputs[3] ? inputs[3].value.trim() : ''
         };
       })
       .filter(item => Object.values(item).some(Boolean));
   }
 
-  function appendUniqueValue(target, key, value) {
-    if (!(key in target)) {
-      target[key] = value;
-      return;
-    }
-
-    let suffix = 2;
-    while ((key + ' (' + suffix + ')') in target) {
-      suffix += 1;
-    }
-
-    target[key + ' (' + suffix + ')'] = value;
+  function appendUnique(target, key, value) {
+    if (!(key in target)) { target[key] = value; return; }
+    let n = 2;
+    while ((key + ' (' + n + ')') in target) n++;
+    target[key + ' (' + n + ')'] = value;
   }
 
   function clearValidation() {
-    document.querySelectorAll('.form-group.is-invalid').forEach(group => group.classList.remove('is-invalid'));
+    document.querySelectorAll('.form-group.is-invalid').forEach(g => g.classList.remove('is-invalid'));
     submitStatus.classList.remove('is-error');
   }
 
@@ -1080,6 +1203,16 @@
 
   function cleanLabel(text) {
     return text.replace(/\s+/g, ' ').replace(/\*/g, '').trim();
+  }
+
+  function setStatus(msg, isError) {
+    submitStatus.textContent = msg;
+    submitStatus.classList.toggle('is-error', Boolean(isError));
+  }
+
+  function showToast() {
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 5000);
   }
 </script>
 </body>
